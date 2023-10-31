@@ -8,14 +8,17 @@ public class PlayerMovement : MonoBehaviour
     public float dashSpeed = 50.0f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 5.0f;
+    
 
     private Rigidbody rb;
     private bool canDash = true;
     private bool isDashing = false;
+    private Collider playerCollider;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        playerCollider = GetComponent<Collider>();
     }
 
     private void Update()
@@ -27,6 +30,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && canDash)
         {
             StartCoroutine(Dash());
+        }
+
+        if (isDashing)
+        {
+            playerCollider.isTrigger = true; // Set collider to trigger mode during dash
+        }
+        else
+        {
+            playerCollider.isTrigger = false; // Reset to default after dash ends
         }
 
         // Only proceed with WASD movement if not dashing
@@ -81,6 +93,15 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        InteractiveObject interactiveObject = collider.gameObject.GetComponent<InteractiveObject>();
+        if (isDashing && interactiveObject != null)
+        {
+            interactiveObject.TakeDamage(5);
+        }
     }
 
 }

@@ -9,6 +9,13 @@ public class RicochetProjectile : Projectile
 
     private void OnCollisionEnter(Collision collision)
     {
+        InteractiveObject interactiveObject = collision.gameObject.GetComponent<InteractiveObject>();
+        if (interactiveObject != null)
+        {
+            interactiveObject.TakeDamage(1);
+            //Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+        }
+
         if (wallLayer == (wallLayer | (1 << collision.gameObject.layer)))
         {
             currentRicochetCount++;
