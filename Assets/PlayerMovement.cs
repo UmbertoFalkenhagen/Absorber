@@ -76,9 +76,11 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(DashCooldown());
     }
 
+
     private IEnumerator DashCooldown()
     {
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
 }
