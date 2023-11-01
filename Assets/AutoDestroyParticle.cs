@@ -2,29 +2,29 @@ using UnityEngine;
 
 public class AutoDestroyParticle : MonoBehaviour
 {
-    private ParticleSystem ps;
-    public int currentLoopCount;
+    private ParticleSystem particleSystem;
+    private float previousTime = 0f;
+    private int loopCount = 0;
 
     void Start()
     {
-        ps = GetComponent<ParticleSystem>();
-        
-        
+        particleSystem = GetComponent<ParticleSystem>();
     }
 
     void Update()
     {
-        
-            currentLoopCount = Mathf.FloorToInt(ps.time / ps.main.duration);
-        Debug.Log(ps.time);
-            if (currentLoopCount >= 1 || (0.9f < ps.time && ps.time < 1))
-            {
-                Destroy(this);
-            }
-        
-        //if (!ps.IsAlive()) // Check if the particle system has finished playing
-        //{
-             // Destroy the GameObject
-        //}
+        // Check if the time has reset, indicating a loop
+        if (particleSystem.time < previousTime)
+        {
+            loopCount++;
+            Debug.Log("Particle system has looped " + loopCount + " times.");
+        }
+
+        if (loopCount >= 2)
+        {
+            Destroy(gameObject);
+        }
+
+        previousTime = particleSystem.time;
     }
 }
