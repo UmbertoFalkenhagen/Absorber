@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
+    public GameObject player;
     public bool isFinished = false;
     public bool hasPlayerEntered = false;
     public string layerName; // The layer name we are interested in
@@ -34,4 +35,5 @@ public class RoomManager : MonoBehaviour
             isFinished = true;
         }
     }
+
 }

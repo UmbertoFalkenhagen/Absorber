@@ -5,46 +5,155 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public GameObject roomPrefab;
-    public Camera mainCamera;
-    public int minRoomNumber;
-    public int maxRoomNumber;
+    public int minRoomNumber = 8;
+    public int maxRoomNumber = 12;
 
-    private List<GameObject> rooms = new List<GameObject>();
-    // Start is called before the first frame update
+    private List<GameObject> placedRooms = new List<GameObject>();
+    private float roomWidth;    // Width of the room prefab
+    private float roomHeight;   // Height of the room prefab
+
     void Start()
     {
-        
+        CalculateRoomDimensions();
+        GenerateLevel();
+        PositionPlayerAndCamera();
     }
 
-    // Update is called once per frame
-    void Update()
+    void CalculateRoomDimensions()
     {
-        
+        Transform floorTransform = roomPrefab.transform.Find("Floor");
+        if (floorTransform != null)
+        {
+            Renderer floorRenderer = floorTransform.GetComponent<Renderer>();
+            if (floorRenderer != null)
+            {
+                roomWidth = floorRenderer.bounds.size.x;
+                roomHeight = floorRenderer.bounds.size.z;
+            }
+            else
+            {
+                Debug.LogError("Floor object does not have a Renderer component.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Floor object not found in the room prefab.");
+        }
     }
 
-    private void CreateLevel()
+    void GenerateLevel()
     {
         int roomsToCreate = Random.Range(minRoomNumber, maxRoomNumber + 1);
-        Vector3 nextRoomPosition = Vector3.zero; // Start at the origin
+        Vector3 initialPosition = Vector3.zero; // Starting at the origin
+        GameObject firstRoom = Instantiate(roomPrefab, initialPosition, Quaternion.identity);
+        placedRooms.Add(firstRoom);
 
-        for (int i = 0; i < roomsToCreate; i++)
+        for (int i = 1; i < roomsToCreate; i++)
         {
-            GameObject newRoom = Instantiate(roomPrefab, nextRoomPosition, Quaternion.identity);
-            rooms.Add(newRoom);
-
-            if (i < roomsToCreate - 1) // If not the last room
+            GameObject newRoom = PlaceRoomNextTo(placedRooms[Random.Range(0, placedRooms.Count)]);
+            if (newRoom != null)
             {
-                nextRoomPosition = DecideNextRoomPosition(newRoom);
+                placedRooms.Add(newRoom);
+            }
+            else
+            {
+                // If no placement was possible, break early
+                break;
             }
         }
     }
 
-    Vector3 DecideNextRoomPosition(GameObject currentRoom)
+    void PositionPlayerAndCamera()
     {
-        // Logic to decide the position of the next room
-        // You can use currentRoom's bounds to calculate the position of the next room
-        // Example: return currentRoom.transform.position + new Vector3(roomWidth, 0, 0); // For eastward room
+        // Move the player to the center of the first room
+        GameObject player = GameObject.FindWithTag("Player");
+        Transform floorTransform = placedRooms[0].transform.Find("Floor");
+        if (player != null && placedRooms.Count > 0)
+        {
+           
+            
+            //Debug.Log(floorTransform.name);
+            if (floorTransform != null)
+            {
+                player.transform.position = floorTransform.Find("PlayerFixPoint").position;
+            }
+            else
+            {
+                Debug.LogWarning("Floor object not found in the first room.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Player object not found or no rooms placed.");
+        }
 
-        return Vector3.zero;
+        // Move the main camera to the CameraFixPoint of the first room
+        Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
+        if (cameraFixPoint != null)
+        {
+            Camera.main.transform.position = cameraFixPoint.position;
+            //Camera.main.transform.rotation = cameraFixPoint.rotation;
+        }
+        else
+        {
+            Debug.LogWarning("CameraFixPoint not found in the first room.");
+        }
+    }
+
+    GameObject PlaceRoomNextTo(GameObject existingRoom)
+    {
+        List<int> directions = new List<int> { 0, 1, 2, 3 }; // N, S, E, W
+        Shuffle(directions); // Randomize the order of directions
+
+        foreach (int direction in directions)
+        {
+            Vector3 newPosition = CalculateNewPosition(existingRoom.transform.position, direction);
+            if (IsPositionFree(newPosition))
+            {
+                return Instantiate(roomPrefab, newPosition, Quaternion.identity);
+            }
+        }
+
+        return null; // No free position found in any direction
+    }
+
+    Vector3 CalculateNewPosition(Vector3 existingPosition, int direction)
+    {
+        switch (direction)
+        {
+            case 0: // North
+                return new Vector3(existingPosition.x, existingPosition.y, existingPosition.z + roomHeight);
+            case 1: // South
+                return new Vector3(existingPosition.x, existingPosition.y, existingPosition.z - roomHeight);
+            case 2: // East
+                return new Vector3(existingPosition.x + roomWidth, existingPosition.y, existingPosition.z);
+            case 3: // West
+                return new Vector3(existingPosition.x - roomWidth, existingPosition.y, existingPosition.z);
+            default:
+                return existingPosition;
+        }
+    }
+
+    bool IsPositionFree(Vector3 position)
+    {
+        foreach (GameObject room in placedRooms)
+        {
+            if (Vector3.Distance(room.transform.position, position) < Mathf.Min(roomWidth, roomHeight))
+            {
+                return false; // Position is already taken
+            }
+        }
+        return true; // Position is free
+    }
+
+    void Shuffle<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            T temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
     }
 }
