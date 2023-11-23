@@ -12,11 +12,14 @@ public class LevelManager : MonoBehaviour
     private float roomWidth;    // Width of the room prefab
     private float roomHeight;   // Height of the room prefab
 
+    [System.Obsolete]
     void Start()
     {
         CalculateRoomDimensions();
         GenerateLevel();
         PositionPlayerAndCamera();
+        GameManager gm = GetComponent<GameManager>();
+        gm.LinkDoors();
     }
 
     void CalculateRoomDimensions()
