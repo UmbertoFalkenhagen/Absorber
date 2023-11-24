@@ -4,7 +4,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    public bool isFighting;
+
     public GameObject activeRoom;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +33,24 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void SetFightingStatus(bool status)
+    {
+        isFighting = status;
+        UpdateDoors();
+    }
+
+    private void UpdateDoors()
+    {
+        DoorManager[] allDoors = FindObjectsOfType<DoorManager>();
+        foreach (var door in allDoors)
+        {
+            if (isFighting || door.linkedDoor == null)
+                door.CloseDoor();
+            else
+                door.OpenDoor();
+        }
     }
 
     public void LinkDoors()
@@ -59,23 +95,23 @@ public class GameManager : MonoBehaviour
         return closestDoor;
     }
 
-    public void ChangeActiveRoom(GameObject newRoom)
-    {
-        if (newRoom != activeRoom)
-        {
-            // Move the main camera to the CameraFixPoint of the active room
-            Transform floorTransform = newRoom.transform.Find("Floor");
-            Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
-            if (cameraFixPoint != null)
-            {
-                Camera.main.transform.position = cameraFixPoint.position;
-                //Camera.main.transform.rotation = cameraFixPoint.rotation;
-            }
-            else
-            {
-                Debug.LogWarning("CameraFixPoint not found in the first room.");
-            }
-        }
+    //public void ChangeActiveRoom(GameObject newRoom)
+    //{
+    //    if (newRoom != activeRoom)
+    //    {
+    //        // Move the main camera to the CameraFixPoint of the active room
+    //        Transform floorTransform = newRoom.transform.Find("Floor");
+    //        Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
+    //        if (cameraFixPoint != null)
+    //        {
+    //            Camera.main.transform.position = cameraFixPoint.position;
+    //            //Camera.main.transform.rotation = cameraFixPoint.rotation;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogWarning("CameraFixPoint not found in the first room.");
+    //        }
+    //    }
         
-    }
+    //}
 }

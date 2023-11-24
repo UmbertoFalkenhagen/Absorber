@@ -1012,7 +1012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstaclePrefab: {fileID: 8265460976455744381, guid: 34cef3b0209d279408a658a786c9cda6, type: 3}
-  maxObstacles: 10
+  maxObstacles: 2
   minDistanceBetweenObstacles: 2
 --- !u!114 &8883964609849079769
 MonoBehaviour:
@@ -1026,6 +1026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04fd7116e5767f04185551646f982623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gm: {fileID: 0}
   player: {fileID: 0}
   isFinished: 0
   hasPlayerEntered: 0
@@ -1043,7 +1044,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 35, y: 1, z: 19}
+  m_Size: {x: 35, y: 4, z: 19}
   m_Center: {x: -2.1, y: 0, z: -0.2}
 --- !u!1 &8883964610004430972
 GameObject:

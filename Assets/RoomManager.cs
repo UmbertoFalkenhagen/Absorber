@@ -13,6 +13,7 @@ public class RoomManager : MonoBehaviour
     public List<GameObject> objectsInLayer;
 
     private List<DoorManager> doors;
+    private Collider roomCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,36 @@ public class RoomManager : MonoBehaviour
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         
         layer = LayerMask.NameToLayer(layerName);
-        doors = new List<DoorManager>(GetComponentsInChildren<DoorManager>());
+        roomCollider = GetComponent<Collider>();
+        CheckInitialPlayerPosition();
+
+    }
+
+    private void CheckInitialPlayerPosition()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null && roomCollider.bounds.Contains(player.transform.position))
+        {
+            
+            CheckForEnemies();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            
+            CheckForEnemies();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            GameManager.Instance.SetFightingStatus(false);
+        }
     }
 
     // Update is called once per frame
@@ -36,32 +66,24 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        if (objectsInLayer.Count == 0)
+        if (objectsInLayer.Count == 0 && GameManager.Instance.activeRoom == gameObject)
         {
-            isFinished = true;
-            foreach (var door in doors)
+            CheckForEnemies();
+        }
+    }
+
+    private void CheckForEnemies()
+    {
+        foreach (GameObject child in objectsInLayer)
+        {
+            if (child.layer == layer)
             {
-                Debug.Log("Door opened");
-                door.OpenDoor();
+                GameManager.Instance.SetFightingStatus(true);
+                return;
             }
         }
-    }
 
-    public void CloseDoors()
-    {
-        foreach (var door in doors)
-        {
-            door.CloseDoor();
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            
-        }
-        
+        GameManager.Instance.SetFightingStatus(false);
     }
 
 }
