@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public bool isFighting;
+    public enum GameState { Generate, Fighting, MoveFree }
+    public GameState CurrentState { get; private set; }
 
-    public GameObject activeRoom;
+    private DoorManager[] allDoors;
+    private RoomManager[] allRooms;
 
     private void Awake()
     {
@@ -23,95 +23,65 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        ChangeState(GameState.Generate);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
+        //bool interactablesleft = false;
+        //foreach (var room in allRooms)
+        //{
+        //    if (room.hasInteractableObjects)
+        //    {
+        //        interactablesleft = true;
+        //    }
+        //}
+        //if (!interactablesleft)
+        //{
+        //    ChangeState(GameManager.GameState.Generate);
+        //}
     }
 
-    public void SetFightingStatus(bool status)
+    public void ChangeState(GameState newState)
     {
-        isFighting = status;
-        UpdateDoors();
-    }
-
-    private void UpdateDoors()
-    {
-        DoorManager[] allDoors = FindObjectsOfType<DoorManager>();
-        foreach (var door in allDoors)
+        if (CurrentState != newState)
         {
-            if (isFighting || door.linkedDoor == null)
-                door.CloseDoor();
-            else
-                door.OpenDoor();
+            Debug.Log("Switching GameState from " + CurrentState + " to " + newState);
         }
+        CurrentState = newState;
+        OnStateChanged(newState);
     }
 
-    public void LinkDoors()
+    private void OnStateChanged(GameState newState)
     {
-        // Find all doors in the scene
-        GameObject[] allDoors = GameObject.FindGameObjectsWithTag("Door");
 
-        foreach (GameObject door in allDoors)
+        switch (newState)
         {
-            DoorManager doorManager = door.GetComponent<DoorManager>();
-            if (doorManager != null && !doorManager.IsLinked())
-            {
-                GameObject closestDoor = FindClosestUnlinkedDoor(door, allDoors);
-                if (closestDoor != null)
+            case GameState.Generate:
+                // Trigger level generation
+                FindObjectOfType<LevelGenerator>().GenerateLevel();
+                allDoors = FindObjectsOfType<DoorManager>();
+                allRooms = FindObjectsOfType<RoomManager>();
+                break;
+            case GameState.Fighting:
+                foreach (var door in allDoors)
                 {
-                    // Link this door with the closest door
-                    doorManager.SetLinkedDoor(closestDoor);
-                    closestDoor.GetComponent<DoorManager>().SetLinkedDoor(door);
+                    door.gameObject.SetActive(true);
                 }
-            }
-        }
-    }
 
-    private GameObject FindClosestUnlinkedDoor(GameObject door, GameObject[] allDoors)
-    {
-        GameObject closestDoor = null;
-        float minDistance = 2.0f; // Max distance for linking doors
-
-        foreach (GameObject otherDoor in allDoors)
-        {
-            if (otherDoor != door && otherDoor.GetComponent<DoorManager>() != null && !otherDoor.GetComponent<DoorManager>().IsLinked())
-            {
-                float distance = Vector3.Distance(door.transform.position, otherDoor.transform.position);
-                if (distance < minDistance)
+                break;
+            case GameState.MoveFree:
+                foreach (var door in allDoors)
                 {
-                    closestDoor = otherDoor;
-                    minDistance = distance;
+                    // Close doors or other logic for fighting state
+                    door.HandleDoorState();
                 }
-            }
+                break;
         }
-
-        return closestDoor;
-    }
-
-    //public void ChangeActiveRoom(GameObject newRoom)
-    //{
-    //    if (newRoom != activeRoom)
-    //    {
-    //        // Move the main camera to the CameraFixPoint of the active room
-    //        Transform floorTransform = newRoom.transform.Find("Floor");
-    //        Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
-    //        if (cameraFixPoint != null)
-    //        {
-    //            Camera.main.transform.position = cameraFixPoint.position;
-    //            //Camera.main.transform.rotation = cameraFixPoint.rotation;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning("CameraFixPoint not found in the first room.");
-    //        }
-    //    }
         
-    //}
+    }
+
+    // Other methods as needed...
 }

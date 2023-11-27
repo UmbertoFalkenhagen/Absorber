@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelGenerator : MonoBehaviour
 {
     public GameObject roomPrefab;
     public int minRoomNumber = 8;
@@ -15,11 +15,35 @@ public class LevelManager : MonoBehaviour
     [System.Obsolete]
     void Start()
     {
+        
+    }
+
+    public void GenerateLevel()
+    {
         CalculateRoomDimensions();
-        GenerateLevel();
+
+        int roomsToCreate = Random.Range(minRoomNumber, maxRoomNumber + 1);
+        Vector3 initialPosition = Vector3.zero; // Starting at the origin
+        GameObject firstRoom = Instantiate(roomPrefab, initialPosition, Quaternion.identity);
+        placedRooms.Add(firstRoom);
+
+        for (int i = placedRooms.Count; i < roomsToCreate; i++)
+        {
+            GameObject newRoom = PlaceRoomNextTo(placedRooms[Random.Range(0, placedRooms.Count)]);
+            if (newRoom != null)
+            {
+                placedRooms.Add(newRoom);
+            }
+            else
+            {
+                // If no placement was possible, break early
+                break;
+            }
+        }
+
+        LinkRoomDoors();
+
         PositionPlayerAndCamera();
-        GameManager gm = GetComponent<GameManager>();
-        gm.LinkDoors();
     }
 
     void CalculateRoomDimensions()
@@ -44,28 +68,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void GenerateLevel()
-    {
-        int roomsToCreate = Random.Range(minRoomNumber, maxRoomNumber + 1);
-        Vector3 initialPosition = Vector3.zero; // Starting at the origin
-        GameObject firstRoom = Instantiate(roomPrefab, initialPosition, Quaternion.identity);
-        placedRooms.Add(firstRoom);
-
-        for (int i = 1; i < roomsToCreate; i++)
-        {
-            GameObject newRoom = PlaceRoomNextTo(placedRooms[Random.Range(0, placedRooms.Count)]);
-            if (newRoom != null)
-            {
-                placedRooms.Add(newRoom);
-            }
-            else
-            {
-                // If no placement was possible, break early
-                break;
-            }
-        }
-    }
-
     void PositionPlayerAndCamera()
     {
         // Move the player to the center of the first room
@@ -73,8 +75,8 @@ public class LevelManager : MonoBehaviour
         Transform floorTransform = placedRooms[0].transform.Find("Floor");
         if (player != null && placedRooms.Count > 0)
         {
-           
-            
+
+
             //Debug.Log(floorTransform.name);
             if (floorTransform != null)
             {
@@ -118,6 +120,27 @@ public class LevelManager : MonoBehaviour
         }
 
         return null; // No free position found in any direction
+    }
+
+    private void LinkRoomDoors()
+    {
+        DoorManager[] allDoors = FindObjectsOfType<DoorManager>();
+
+        foreach (var door in allDoors)
+        {
+            if (!door.IsLinked())
+            {
+                foreach (var otherDoor in allDoors)
+                {
+                    if (otherDoor != door && !otherDoor.IsLinked() && Vector3.Distance(door.transform.position, otherDoor.transform.position) < 2f)
+                    {
+                        door.linkedDoor = otherDoor.gameObject;
+                        otherDoor.linkedDoor =door.gameObject;
+                        break; // Stop looking for another door once a link is established
+                    }
+                }
+            }
+        }
     }
 
     Vector3 CalculateNewPosition(Vector3 existingPosition, int direction)

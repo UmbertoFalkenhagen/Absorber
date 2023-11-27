@@ -25,31 +25,34 @@ public class DoorManager : MonoBehaviour
         
     }
 
+    public void HandleDoorState()
+    {
+        if (GameManager.Instance.CurrentState == GameManager.GameState.MoveFree && IsLinked())
+        {
+            OpenDoor();
+        }
+        else if (GameManager.Instance.CurrentState == GameManager.GameState.Fighting)
+        {
+            CloseDoor();
+        }
+    }
+
     public bool IsLinked()
     {
         return linkedDoor != null;
     }
 
-    public void SetLinkedDoor(GameObject otherDoor)
+    private void OpenDoor()
     {
-        linkedDoor = otherDoor;
+        // Logic to 'open' the door (e.g., deactivate, animate, etc.)
+        gameObject.SetActive(false);
     }
 
-    public void OpenDoor()
+    private void CloseDoor()
     {
-        if (linkedDoor != null)
-        {
-            gameObject.SetActive(false); // Hides the door
-            linkedDoor.SetActive(false); // Hides the linked door
-        }
+        // Logic to 'close' the door
+        gameObject.SetActive(true);
     }
 
-    public void CloseDoor()
-    {
-        gameObject.SetActive(true); // Shows the door
-        if (linkedDoor != null)
-        {
-            linkedDoor.SetActive(true); // Shows the linked door
-        }
-    }
+    // Optionally, methods to set and unset linked doors
 }

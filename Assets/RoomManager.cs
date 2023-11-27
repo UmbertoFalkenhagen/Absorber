@@ -4,58 +4,47 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-    public GameManager gm;
-    public GameObject player;
-    public bool isFinished = false;
-    public bool hasPlayerEntered = false;
+    public bool hasInteractableObjects;
     public string layerName; // The layer name we are interested in
     public int layer;
     public List<GameObject> objectsInLayer;
 
-    private List<DoorManager> doors;
     private Collider roomCollider;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
-        layer = LayerMask.NameToLayer(layerName);
+        // Initialize hasInteractableObjects based on the presence of interactable objects in this room
         roomCollider = GetComponent<Collider>();
-        CheckInitialPlayerPosition();
-
+        layer = LayerMask.NameToLayer(layerName);
     }
 
-    private void CheckInitialPlayerPosition()
+    private void Update()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null && roomCollider.bounds.Contains(player.transform.position))
+        // Optionally, you can continuously check for the presence of interactable objects
+        // and update the game state accordingly
+        UpdateRoomState();
+    }
+
+    private void UpdateRoomState()
+    {
+        if (!CheckForInteractableObjects() && CheckPlayerPosition())
         {
-            
-            CheckForEnemies();
+            // If no interactable objects left, update the game state to MoveFree
+            GameManager.Instance.ChangeState(GameManager.GameState.MoveFree);
+        }
+        else if (CheckPlayerPosition() && CheckForInteractableObjects())
+        {
+
+            // If the player is in the room and there are interactable objects, update to Fighting state
+            GameManager.Instance.ChangeState(GameManager.GameState.Fighting);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private bool CheckForInteractableObjects()
     {
-        if (other.CompareTag("Player"))
-        {
-            
-            CheckForEnemies();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            GameManager.Instance.SetFightingStatus(false);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        // Implement logic to check for interactable objects within the room.
+        // This could be done by checking the number of children with a specific tag or component
+        // Return true if interactable objects are present, false otherwise
         objectsInLayer = new List<GameObject>();
 
         foreach (Transform child in transform)
@@ -66,24 +55,39 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        if (objectsInLayer.Count == 0 && GameManager.Instance.activeRoom == gameObject)
+        if (objectsInLayer.Count > 0)
         {
-            CheckForEnemies();
+            hasInteractableObjects = true;
+
         }
+        else
+        {
+            hasInteractableObjects = false;
+        }
+
+        return hasInteractableObjects;
     }
 
-    private void CheckForEnemies()
+    private bool CheckPlayerPosition()
     {
-        foreach (GameObject child in objectsInLayer)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null && roomCollider.bounds.Contains(player.transform.position))
         {
-            if (child.layer == layer)
+            Transform floorTransform = transform.Find("Floor");
+            Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
+            if (cameraFixPoint != null)
             {
-                GameManager.Instance.SetFightingStatus(true);
-                return;
+                Camera.main.transform.position = cameraFixPoint.position;
+                //Camera.main.transform.rotation = cameraFixPoint.rotation;
             }
+            else
+            {
+                Debug.LogWarning("CameraFixPoint not found in the first room.");
+            }
+            return true;
         }
 
-        GameManager.Instance.SetFightingStatus(false);
+        return false;
     }
 
 }
