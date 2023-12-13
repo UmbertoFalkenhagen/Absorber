@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyHealthSystem : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     private int currentHealth;
@@ -9,17 +9,9 @@ public class EnemyHealthSystem : MonoBehaviour
     public float shakeDuration = 0.1f;
     public float shakeMagnitude = 0.05f;
 
-    public GameObject destructionEffectPrefab;
-
-    private Rigidbody enemyRigidbody;
-    private Renderer enemyRenderer;
-
     private void Start()
     {
         currentHealth = maxHealth;
-
-        enemyRigidbody = GetComponent<Rigidbody>();
-        enemyRenderer = GetComponent<Renderer>();
     }
 
     public void TakeDamage(int damage)
@@ -29,7 +21,6 @@ public class EnemyHealthSystem : MonoBehaviour
         // Trigger shake effect
         Shake();
 
-        // Check if the enemy is destroyed
         if (currentHealth <= 0)
         {
             DestroyEnemy();
@@ -52,21 +43,21 @@ public class EnemyHealthSystem : MonoBehaviour
             float x = Random.Range(-1f, 1f) * shakeMagnitude;
             float y = Random.Range(-1f, 1f) * shakeMagnitude;
 
-            enemyRigidbody.MovePosition(new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z));
+            transform.position = new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        enemyRigidbody.MovePosition(originalPosition);
+        transform.position = originalPosition;
     }
 
     private void DestroyEnemy()
     {
-        // Instantiate destruction effect
-        Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
+        // Implement any logic you need when the enemy is destroyed
+        // For example, play an explosion animation, spawn particles, etc.
 
-        // Destroy the enemy GameObject
+        // Then, destroy the GameObject
         Destroy(gameObject);
     }
 }
