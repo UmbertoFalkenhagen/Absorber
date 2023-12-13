@@ -29,7 +29,16 @@ public class PlayerShooting : MonoBehaviour
     {
         if (firePoint && projectilePrefabs.Count > 0)
         {
-            Instantiate(projectilePrefabs[currentProjectileIndex], firePoint.position, firePoint.rotation);
+            GameObject newProjectile = Instantiate(projectilePrefabs[currentProjectileIndex], firePoint.position, firePoint.rotation);
+
+            // Set the projectile's speed and damage (adjust these values as needed)
+            Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+            if (projectileComponent != null)
+            {
+                projectileComponent.parent = 0;
+                projectileComponent.speed = 10.0f; // Example speed
+                projectileComponent.damage = 10;   // Example damage
+            }
         }
     }
 }
