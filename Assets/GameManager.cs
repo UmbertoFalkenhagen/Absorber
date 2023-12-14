@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    
     void Start()
     {
         ChangeState(GameState.Generate);
