@@ -278,6 +278,7 @@ MonoBehaviour:
   roomPrefab: {fileID: 8883964609849079764, guid: 14b58fd3424d3eb45879221ae19ab503, type: 3}
   minRoomNumber: 8
   maxRoomNumber: 12
+  placedRooms: []
 --- !u!1 &556909354
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +360,7 @@ GameObject:
   - component: {fileID: 621725364}
   - component: {fileID: 621725363}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: IngameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
