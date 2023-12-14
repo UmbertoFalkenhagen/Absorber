@@ -998,6 +998,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2965344736253624233, guid: 0ed4ddf66200e31458bec0ae4867a42d, type: 3}
+      propertyPath: shootCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8220982467732663881, guid: 0ed4ddf66200e31458bec0ae4867a42d, type: 3}
       propertyPath: maxHealth
       value: 10

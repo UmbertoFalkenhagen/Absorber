@@ -8,14 +8,14 @@ public class LevelGenerator : MonoBehaviour
     public int minRoomNumber = 8;
     public int maxRoomNumber = 12;
 
-    private List<GameObject> placedRooms = new List<GameObject>();
+    public List<GameObject> placedRooms;
     private float roomWidth;    // Width of the room prefab
     private float roomHeight;   // Height of the room prefab
 
     [System.Obsolete]
     void Start()
     {
-        
+        placedRooms = new List<GameObject>();
     }
 
     public void GenerateLevel()

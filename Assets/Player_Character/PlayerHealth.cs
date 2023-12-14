@@ -36,11 +36,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void KillPlayer()
     {
-        // Implement any logic you need when the enemy is destroyed
-        // For example, play an explosion animation, spawn particles, etc.
-
-        // Then, destroy the GameObject
-        Destroy(gameObject);
+        GameManager.Instance.GameOver();
     }
 
     public void GainHealth(int amount)

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -6,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     public enum GameState { Generate, Fighting, MoveFree }
     public GameState CurrentState { get; private set; }
+
+    private string gameOverScreen = "GameOverScreen"; // Replace with your game scene name
 
     private DoorManager[] allDoors;
     private RoomManager[] allRooms;
@@ -26,6 +30,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ChangeState(GameState.Generate);
+        //Time.timeScale = 1;
     }
 
     private void Update()
@@ -81,6 +86,11 @@ public class GameManager : MonoBehaviour
                 break;
         }
         
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(gameOverScreen);
     }
 
     // Other methods as needed...

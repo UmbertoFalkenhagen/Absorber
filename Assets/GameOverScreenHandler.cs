@@ -10,34 +10,30 @@ public class GameOverScreenHandler : MonoBehaviour
     public float fadeDuration = 2.0f;
     private string gameSceneName = "GameScene"; // Replace with your game scene name
     private string mainMenuName = "MainMenu"; // Replace with your game scene name
-    public void OnClickRestart()
+
+    // Start is called before the first frame update
+    void Start()
     {
-        StartCoroutine(FadeAndRestart());
+        
     }
 
-    public void OnClickMainMenu()
+    // Update is called once per frame
+    void Update()
     {
-        StartCoroutine(FadeAndMainMenu());
+        
     }
 
-    private IEnumerator FadeAndMainMenu()
+    public void OnClickExit()
     {
-        float currentTime = 0;
-        Color originalColor = fadePanel.color;
-
-        while (currentTime < fadeDuration)
-        {
-            float alpha = Mathf.Lerp(0, 1, currentTime / fadeDuration);
-            fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-
-        fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
-        SceneManager.LoadScene(mainMenuName);
+        StartCoroutine(FadeAndExitGame());
     }
 
-    private IEnumerator FadeAndRestart()
+    public void OnClickStart()
+    {
+        StartCoroutine(FadeAndStartGame());
+    }
+
+    private IEnumerator FadeAndStartGame()
     {
         float currentTime = 0;
         Color originalColor = fadePanel.color;
@@ -52,5 +48,22 @@ public class GameOverScreenHandler : MonoBehaviour
 
         fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
         SceneManager.LoadScene(gameSceneName);
+    }
+
+    private IEnumerator FadeAndExitGame()
+    {
+        float currentTime = 0;
+        Color originalColor = fadePanel.color;
+
+        while (currentTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(0, 1, currentTime / fadeDuration);
+            fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+
+        fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
+        SceneManager.LoadScene(mainMenuName);
     }
 }
