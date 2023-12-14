@@ -37,10 +37,7 @@ public class EnemyShooting : MonoBehaviour
         {
             projectileComponent.parent = 1;
             projectileComponent.speed = 10.0f; // Example speed
-            projectileComponent.damage = 10;   // Example damage
+            projectileComponent.damage = 1;   // Example damage
         }
-
-        // Destroy the projectile after a certain time (to prevent memory leaks)
-        Destroy(newProjectile, 5f);
     }
 }

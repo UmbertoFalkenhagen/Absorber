@@ -5,7 +5,8 @@ using UnityEngine;
 public abstract class Projectile : MonoBehaviour
 {
     public float speed = 10.0f;
-    public int damage = 10;
+    public int damage = 1;
+    public PlayerHealth playerHealth;
 
     public float lifetime = 5.0f; // Time (in seconds) before the projectile is automatically destroyed.
 
@@ -20,6 +21,7 @@ public abstract class Projectile : MonoBehaviour
         {
             rb.velocity = transform.forward * speed;
         }
+        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
 
         // Schedule the projectile to be destroyed after its lifetime expires.
         Destroy(gameObject, lifetime);
