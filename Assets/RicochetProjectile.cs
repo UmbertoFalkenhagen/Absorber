@@ -9,11 +9,44 @@ public class RicochetProjectile : Projectile
 
     private void OnCollisionEnter(Collision collision)
     {
-        InteractiveObject interactiveObject = collision.gameObject.GetComponent<InteractiveObject>();
-        if (interactiveObject != null)
+        if (parent == 0)
         {
-            interactiveObject.TakeDamage(1);
-            //Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+            InteractiveObject interactiveObject = collision.gameObject.GetComponent<InteractiveObject>();
+            if (interactiveObject != null)
+            {
+                interactiveObject.TakeDamage(damage);
+                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+                Debug.Log("Object collision");
+            }
+
+            // Check for EnemyHealth component
+            EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+                Debug.Log("Enemy collision");
+                return; // Exit the method to avoid further checks.
+            }
+
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+
+                return; // Exit the method to avoid further checks.
+            }
+        }
+        else if (parent == 1)
+        {
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+
+                return; // Exit the method to avoid further checks.
+            }
         }
 
         if (wallLayer == (wallLayer | (1 << collision.gameObject.layer)))
@@ -31,5 +64,10 @@ public class RicochetProjectile : Projectile
                 rb.velocity = reflection * speed;
             }
         }
+    }
+
+    protected override void OnTriggerEnter(Collider other)
+    {
+        
     }
 }

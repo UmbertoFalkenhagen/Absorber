@@ -7,7 +7,7 @@ public class StandardProjectile : Projectile
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (parent == 0)
+        if (parent == 0 )
         {
             InteractiveObject interactiveObject = other.gameObject.GetComponent<InteractiveObject>();
             if (interactiveObject != null)
@@ -26,21 +26,18 @@ public class StandardProjectile : Projectile
                 Debug.Log("Enemy collision");
                 return; // Exit the method to avoid further checks.
             }
-        } else if ( parent == 1)
+        } else if ( parent == 1 )
         {
-            if (playerHealth == null)
+            Debug.Log(other.gameObject.GetComponent<PlayerHealth>());
+            PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
             {
-                Debug.Log("No player health assigned");
-                return;
+                playerHealth.TakeDamage(damage);
+                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
+                
+                return; // Exit the method to avoid further checks.
             }
-            playerHealth.TakeDamage(damage);
-            Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
-            Debug.Log("Player collision");
-            return; // Exit the method to avoid further checks.
-        } else
-        {
-            Debug.Log("Wrong parent setting");
-        }
+        } 
         
 
         // If the collided object is on the "wall" layer

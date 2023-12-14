@@ -130,6 +130,7 @@ MonoBehaviour:
   speed: 10
   damage: 10
   lifetime: 5
+  parent: 0
   wallLayer:
     serializedVersion: 2
     m_Bits: 64

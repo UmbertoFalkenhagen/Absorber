@@ -8,6 +8,7 @@ public class PlayerShooting : MonoBehaviour
     public List<GameObject> projectilePrefabs; // List of different projectile prefabs.
     private int currentProjectileIndex = 0;
 
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
