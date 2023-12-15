@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public float dashSpeed = 50.0f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 5.0f;
+
+    public CooldownBar slashCooldown; 
     
 
     private Rigidbody rb;
@@ -17,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        slashCooldown.SetMaxHealth(dashCooldown);
+        slashCooldown.SetHealth(dashCooldown);
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<Collider>();
     }
@@ -91,7 +95,15 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator DashCooldown()
     {
-        yield return new WaitForSeconds(dashCooldown);
+        float remainingCooldown = 0f;
+
+        while (remainingCooldown < dashCooldown)
+        {
+            remainingCooldown += Time.deltaTime;
+            slashCooldown.SetHealth(remainingCooldown);
+            yield return null;
+        }
+
         canDash = true;
     }
 
