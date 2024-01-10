@@ -101,7 +101,7 @@ MonoBehaviour:
   hp: 10
   destructionEffectPrefab: {fileID: 577866978376811887, guid: f8cbb3d90f363d347a53b7f0ec3007d2, type: 3}
   healthEffectsPrefab: {fileID: 100000, guid: 6746092d79f3e4fe1bfa983603238e26, type: 3}
-  healthItemPrefab: {fileID: 860873111310014103, guid: 0556377e32fb8c54c84e11f1ad9be9e9, type: 3}
+  healthItemPrefab: {fileID: 7808740138598201839, guid: d7b93eab137c31640a623f910cb42821, type: 3}
   defaultMaterial: {fileID: 2100000, guid: 765deaeb5659cb244aa64461d76b4f38, type: 2}
   lowHPMaterial: {fileID: 2100000, guid: 265d67326f540234fad36ddd8731205a, type: 2}
   criticalHPMaterial: {fileID: 2100000, guid: 1c091c463ab90214397670cb2c0707e8, type: 2}

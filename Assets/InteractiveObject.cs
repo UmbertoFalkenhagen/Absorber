@@ -48,12 +48,9 @@ public class InteractiveObject : MonoBehaviour
             {
                 Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
                 //Instantiate(healthEffectsPrefab, transform.position, Quaternion.identity);
-            } else
-            {
-                Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
-                Destroy(gameObject); // or any other effect like play animation, sound, etc.
-            }
-            
+            } 
+            Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject); // or any other effect like play animation, sound, etc.
         }
     }
 
