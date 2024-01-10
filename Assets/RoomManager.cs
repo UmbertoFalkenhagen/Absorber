@@ -73,6 +73,7 @@ public class RoomManager : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null && roomCollider.bounds.Contains(player.transform.position))
         {
+            GameManager.Instance.activeRoom = gameObject;
             Transform floorTransform = transform.Find("Floor");
             Transform cameraFixPoint = floorTransform.Find("CameraFixPoint");
             if (cameraFixPoint != null)

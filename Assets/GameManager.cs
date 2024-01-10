@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private DoorManager[] allDoors;
     private RoomManager[] allRooms;
 
+    public GameObject activeRoom;
+
     private void Awake()
     {
         if (Instance == null)
