@@ -5,6 +5,8 @@ public class InteractiveObject : MonoBehaviour
 {
     public int hp = 10;
     public GameObject destructionEffectPrefab;
+    public GameObject healthEffectsPrefab;
+    public GameObject healthItemPrefab;
 
     public Material defaultMaterial;
     public Material lowHPMaterial; // Set this in the Inspector to the material for HP <= 5
@@ -41,8 +43,17 @@ public class InteractiveObject : MonoBehaviour
 
         if (hp <= 0)
         {
-            Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject); // or any other effect like play animation, sound, etc.
+            // 10% chance to spawn a health item
+            if (Random.Range(1, 11) <= 5) // Generates a number between 1 and 10
+            {
+                Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
+                //Instantiate(healthEffectsPrefab, transform.position, Quaternion.identity);
+            } else
+            {
+                Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
+                Destroy(gameObject); // or any other effect like play animation, sound, etc.
+            }
+            
         }
     }
 
