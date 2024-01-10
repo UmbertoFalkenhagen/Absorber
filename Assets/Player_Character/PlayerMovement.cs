@@ -83,6 +83,8 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(dashDirection * dashSpeed, ForceMode.VelocityChange);
         }
 
+        SoundManager.Instance.PlaySoundOnce("Slash");
+
         yield return new WaitForSeconds(dashDuration);
 
         rb.velocity = Vector3.zero;

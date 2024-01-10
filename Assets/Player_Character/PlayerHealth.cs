@@ -24,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        SoundManager.Instance.PlaySoundOnce("TakeDamage");
 
 
         if (currentHealth <= 0)
@@ -43,5 +44,6 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth += amount;
         healthbar.SetHealth(currentHealth);
+        SoundManager.Instance.PlaySoundOnce("GainHealth");
     }
 }

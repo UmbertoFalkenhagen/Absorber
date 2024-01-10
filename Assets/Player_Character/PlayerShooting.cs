@@ -40,6 +40,8 @@ public class PlayerShooting : MonoBehaviour
                 projectileComponent.speed = 10.0f; // Example speed
                 projectileComponent.damage = 10;   // Example damage
             }
+
+            SoundManager.Instance.PlaySoundOnce("Shoot");
         }
     }
 }
