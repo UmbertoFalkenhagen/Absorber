@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
         if (CurrentState != newState)
         {
             Debug.Log("Switching GameState from " + CurrentState + " to " + newState);
+            if (newState == GameState.MoveFree)
+            {
+                SoundManager.Instance.PlaySoundOnce("DoorsOpen");
+            }
         }
         CurrentState = newState;
         OnStateChanged(newState);

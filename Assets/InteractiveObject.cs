@@ -46,7 +46,7 @@ public class InteractiveObject : MonoBehaviour
             // 10% chance to spawn a health item
             if (Random.Range(1, 11) <= 5) // Generates a number between 1 and 10
             {
-                Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
+                SpawnHealthItem(SoundManager.Instance.GetSoundLength("HealthDrop"));
                 //Instantiate(healthEffectsPrefab, transform.position, Quaternion.identity);
             } 
             Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
@@ -73,5 +73,12 @@ public class InteractiveObject : MonoBehaviour
 
         transform.position = originalPosition;
         isShaking = false;
+    }
+
+    private IEnumerator SpawnHealthItem(float delay)
+    {
+        SoundManager.Instance.PlaySoundOnce("HealthDrop");
+        yield return new WaitForSeconds(delay);
+        Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
     }
 }
