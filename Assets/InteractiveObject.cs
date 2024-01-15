@@ -44,10 +44,10 @@ public class InteractiveObject : MonoBehaviour
         if (hp <= 0)
         {
             // 10% chance to spawn a health item
-            if (Random.Range(1, 11) <= 5) // Generates a number between 1 and 10
+            if (Random.Range(1, 11) <= 2) // Generates a number between 1 and 10
             {
                 SpawnHealthItem(SoundManager.Instance.GetSoundLength("HealthDrop"));
-                //Instantiate(healthEffectsPrefab, transform.position, Quaternion.identity);
+                Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
             } 
             Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject); // or any other effect like play animation, sound, etc.

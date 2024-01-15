@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     {
         SoundManager.Instance.PlaySoundForever("Fighting");
         SoundManager.Instance.PlaySoundForever("Exploring");
+        SoundManager.Instance.ChangeSoundVolume("Exploring", 0);
+        SoundManager.Instance.ChangeSoundVolume("Shoot", 0.5f);
         ChangeState(GameState.Generate);
         //Time.timeScale = 1;
     }
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Fighting:
                 SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 1f, 1f);
-                SoundManager.Instance.ChangeSoundVolumeOverTime("Exploring", 0f, 1f);
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Exploring", 0f, 0f);
                 foreach (var door in allDoors)
                 {
                     door.gameObject.SetActive(true);
@@ -93,7 +95,7 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameState.MoveFree:
-                SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 0f, 1f);
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 0f, 0f);
                 SoundManager.Instance.ChangeSoundVolumeOverTime("Exploring", 1f, 1f);
                 foreach (var door in allDoors)
                 {
