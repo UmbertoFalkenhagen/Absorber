@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5356628413238583930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5356628413238583928}
+  - component: {fileID: 5356628413238583931}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5356628413238583928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356628413238583930}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 929.55884, y: 1074.882, z: 11.974731}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5356628413238583931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356628413238583930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adb15dd3a6604d44b15c0911906dbf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Shoot
+    clip: {fileID: 8300000, guid: b3452a0e7f5311f4db2ae6b000a8d788, type: 3}
+    source: {fileID: 0}
+  - name: Slash
+    clip: {fileID: 8300000, guid: 8dabbdb9aa68a6f4cbf87456ee7cbb4e, type: 3}
+    source: {fileID: 0}
+  - name: TakeDamage
+    clip: {fileID: 8300000, guid: 5d8d356ceea807343beb709cda366833, type: 3}
+    source: {fileID: 0}
+  - name: GainHealth
+    clip: {fileID: 8300000, guid: 2732176f91d6d6940ad164bf40b36876, type: 3}
+    source: {fileID: 0}
+  - name: GainAmmo
+    clip: {fileID: 8300000, guid: f48bd09b7073db3448f38f34188b651d, type: 3}
+    source: {fileID: 0}
+  - name: HealthDrop
+    clip: {fileID: 8300000, guid: 32f11a4d4419edc4dac96b8bdb69e2e3, type: 3}
+    source: {fileID: 0}
+  - name: DoorsOpen
+    clip: {fileID: 8300000, guid: 6475556131b1f114782a0eef5d092de4, type: 3}
+    source: {fileID: 0}
+  - name: Exploring
+    clip: {fileID: 8300000, guid: d52df1ac21af1974b881b0dd62db6e8e, type: 3}
+    source: {fileID: 0}
+  - name: Fighting
+    clip: {fileID: 8300000, guid: 3c1e6416d7d420741a799a0289c26234, type: 3}
+    source: {fileID: 0}
+  - name: Death
+    clip: {fileID: 8300000, guid: 444b72faff943a549bf404500db552a9, type: 3}
+    source: {fileID: 0}

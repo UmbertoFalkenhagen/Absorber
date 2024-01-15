@@ -13,7 +13,7 @@ public class MainMenuHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SoundManager.Instance.PlaySoundForever("Fighting");
     }
 
     // Update is called once per frame
@@ -37,6 +37,8 @@ public class MainMenuHandler : MonoBehaviour
         float currentTime = 0;
         Color originalColor = fadePanel.color;
 
+        SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 0, 1);
+
         while (currentTime < fadeDuration)
         {
             float alpha = Mathf.Lerp(0, 1, currentTime / fadeDuration);
@@ -46,6 +48,7 @@ public class MainMenuHandler : MonoBehaviour
         }
 
         fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
+        SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene(gameSceneName);
     }
 

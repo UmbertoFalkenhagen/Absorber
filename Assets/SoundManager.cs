@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class SoundManager : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class SoundManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -35,6 +36,7 @@ public class SoundManager : MonoBehaviour
         {
             sound.source = gameObject.AddComponent<AudioSource>();
             sound.source.clip = sound.clip;
+            sound.source.spatialBlend = 0; // This makes the sound global
         }
     }
     private void Start()
@@ -48,7 +50,7 @@ public class SoundManager : MonoBehaviour
         Sound sound = sounds.Find(s => s.name == soundName);
         if (sound != null && sound.clip != null)
         {
-            AudioSource.PlayClipAtPoint(sound.clip, transform.position);
+            sound.source.Play();
         }
     }
 
@@ -62,11 +64,9 @@ public class SoundManager : MonoBehaviour
         Sound sound = sounds.Find(s => s.name == soundName);
         if (sound != null && sound.clip != null)
         {
-            AudioSource source = gameObject.AddComponent<AudioSource>();
-            source.clip = sound.clip;
-            source.loop = true;
-            source.Play();
-            playingSounds[soundName] = source;
+            sound.source.loop = true;
+            sound.source.Play();
+            playingSounds[soundName] = sound.source;
         }
     }
 
@@ -74,7 +74,7 @@ public class SoundManager : MonoBehaviour
     {
         if (playingSounds.TryGetValue(soundName, out AudioSource source))
         {
-            Destroy(source);
+            source.Stop();
             playingSounds.Remove(soundName);
         }
     }
@@ -89,7 +89,7 @@ public class SoundManager : MonoBehaviour
     {
         foreach (var kvp in playingSounds)
         {
-            Destroy(kvp.Value);
+            kvp.Value.Stop();
         }
         playingSounds.Clear();
     }
@@ -102,4 +102,30 @@ public class SoundManager : MonoBehaviour
             sound.source.volume = Mathf.Clamp(newVolume, 0f, 1f); // Clamp the volume between 0 and 1
         }
     }
+
+    public void ChangeSoundVolumeOverTime(string soundName, float targetVolume, float duration)
+    {
+        Sound sound = sounds.Find(s => s.name == soundName);
+        if (sound != null && sound.source != null)
+        {
+            StartCoroutine(ChangeVolume(sound.source, targetVolume, duration));
+        }
+    }
+
+    private IEnumerator ChangeVolume(AudioSource source, float targetVolume, float duration)
+    {
+        float currentTime = 0;
+        float startVolume = source.volume;
+
+        while (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+            float newVolume = Mathf.Lerp(startVolume, targetVolume, currentTime / duration);
+            source.volume = Mathf.Clamp(newVolume, 0f, 1f);
+            yield return null;
+        }
+
+        source.volume = targetVolume; // Ensure the final volume is exactly the target volume
+    }
+
 }

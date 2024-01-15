@@ -14,7 +14,7 @@ public class GameOverScreenHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SoundManager.Instance.PlaySoundForever("Death");
     }
 
     // Update is called once per frame
@@ -37,6 +37,7 @@ public class GameOverScreenHandler : MonoBehaviour
     {
         float currentTime = 0;
         Color originalColor = fadePanel.color;
+        SoundManager.Instance.ChangeSoundVolumeOverTime("Death", 0, 1);
 
         while (currentTime < fadeDuration)
         {
@@ -47,6 +48,7 @@ public class GameOverScreenHandler : MonoBehaviour
         }
 
         fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
+        SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene(gameSceneName);
     }
 

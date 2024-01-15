@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -21,17 +22,21 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+
+        
     }
 
     
     void Start()
     {
+        SoundManager.Instance.PlaySoundForever("Fighting");
+        SoundManager.Instance.PlaySoundForever("Exploring");
         ChangeState(GameState.Generate);
         //Time.timeScale = 1;
     }
@@ -72,12 +77,15 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.Generate:
+                Debug.Log("Generating Rooms");
                 // Trigger level generation
                 FindObjectOfType<LevelGenerator>().GenerateLevel();
                 allDoors = FindObjectsOfType<DoorManager>();
                 allRooms = FindObjectsOfType<RoomManager>();
                 break;
             case GameState.Fighting:
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 1f, 1f);
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Exploring", 0f, 1f);
                 foreach (var door in allDoors)
                 {
                     door.gameObject.SetActive(true);
@@ -85,6 +93,8 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameState.MoveFree:
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Fighting", 0f, 1f);
+                SoundManager.Instance.ChangeSoundVolumeOverTime("Exploring", 1f, 1f);
                 foreach (var door in allDoors)
                 {
                     // Close doors or other logic for fighting state
@@ -97,6 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene(gameOverScreen);
     }
 
