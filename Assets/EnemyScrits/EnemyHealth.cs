@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public int maxhp = 5;
-    private int currenthp;
+    public int currenthp;
 
     public float shakeDuration = 0.1f;
     public float shakeMagnitude = 0.05f;
@@ -22,10 +22,8 @@ public class EnemyHealth : MonoBehaviour
         objectRenderer.material = defaultMaterial;
     }
 
-    public void TakeDamage(int damage)
+    public void Update()
     {
-        currenthp -= damage;
-
         // Check for material change conditions
         if (currenthp <= maxhp / 4)
         {
@@ -34,15 +32,22 @@ public class EnemyHealth : MonoBehaviour
         else if (currenthp <= maxhp / 2)
         {
             objectRenderer.material = lowHPMaterial;
-        }
-
-        // Trigger shake effect
-        Shake();
-
+        } 
+        
         if (currenthp <= 0)
         {
             DestroyEnemy();
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currenthp -= damage;
+        Debug.Log("Taking damage, new hp is " + currenthp);
+        // Trigger shake effect
+        Shake();
+
+        
     }
 
     private void Shake()

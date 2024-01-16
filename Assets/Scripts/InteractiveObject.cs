@@ -24,22 +24,13 @@ public class InteractiveObject : MonoBehaviour
         objectRenderer = GetComponent<Renderer>();
         originalPosition = transform.position;
     }
-
-    public void TakeDamage(int damage)
+    private void Update()
     {
-        
-        currenthp -= damage;
-        Debug.Log("Taking damage, new hp is " + currenthp);
-        // Trigger shake effect
-        if (!isShaking)
-            StartCoroutine(Shake());
-
-        // Check for material change conditions
-        if (currenthp <= maxhp/4)
+        if (currenthp <= maxhp / 4)
         {
             objectRenderer.material = criticalHPMaterial;
         }
-        else if (currenthp <= maxhp/2)
+        else if (currenthp <= maxhp / 2)
         {
             objectRenderer.material = lowHPMaterial;
         }
@@ -51,10 +42,23 @@ public class InteractiveObject : MonoBehaviour
             {
                 SpawnHealthItem(SoundManager.Instance.GetSoundLength("HealthDrop"));
                 Instantiate(healthItemPrefab, transform.position, Quaternion.identity);
-            } 
+            }
             Instantiate(destructionEffectPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject); // or any other effect like play animation, sound, etc.
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        
+        currenthp -= damage;
+        Debug.Log("Taking damage, new hp is " + currenthp);
+        // Trigger shake effect
+        if (!isShaking)
+            StartCoroutine(Shake());
+
+        // Check for material change conditions
+        
     }
 
     private IEnumerator Shake()

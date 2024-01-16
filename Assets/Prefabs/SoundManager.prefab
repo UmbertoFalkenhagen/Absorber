@@ -75,3 +75,6 @@ MonoBehaviour:
   - name: Death
     clip: {fileID: 8300000, guid: 444b72faff943a549bf404500db552a9, type: 3}
     source: {fileID: 0}
+  - name: EmptyGun
+    clip: {fileID: 8300000, guid: be0bb064f5c147a49979f04bf6df829c, type: 3}
+    source: {fileID: 0}

@@ -1571,6 +1571,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1702536493}
     - target: {fileID: 2474190623194300645, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
+      propertyPath: currentProjectileType
+      value: 
+      objectReference: {fileID: 859186254913477860, guid: 111348931c7993742ba23cc7959d5124, type: 3}
+    - target: {fileID: 2474190623194300645, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
       propertyPath: projectilePrefabs.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -2139,6 +2143,7 @@ MonoBehaviour:
   - {fileID: 859186254913477860, guid: 111348931c7993742ba23cc7959d5124, type: 3}
   - {fileID: 859186254913477860, guid: 8425188e6fdb1a54fa725cdb9c2e3949, type: 3}
   - {fileID: 859186254913477860, guid: 04fbbdc03b84d054daecca654b495471, type: 3}
+  currentProjectileType: {fileID: 0}
 --- !u!136 &5866666020948121238
 CapsuleCollider:
   m_ObjectHideFlags: 0

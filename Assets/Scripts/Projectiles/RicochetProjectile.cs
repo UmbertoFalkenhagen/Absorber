@@ -28,15 +28,6 @@ public class RicochetProjectile : Projectile
                 Debug.Log("Enemy collision");
                 return; // Exit the method to avoid further checks.
             }
-
-            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(damage);
-                Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
-                Debug.Log("Player collision");
-                return; // Exit the method to avoid further checks.
-            }
         }
         else if (parent == 1)
         {

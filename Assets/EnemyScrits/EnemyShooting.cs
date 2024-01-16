@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-    public enum ProjectileType { Standard, Shotgun, Ricochet }
+    //public enum ProjectileType { Standard, Shotgun, Ricochet }
 
     [System.Serializable]
     public struct ProjectileProbability
@@ -21,7 +21,7 @@ public class EnemyShooting : MonoBehaviour
 
     public ProjectileProbability projectileProbabilities;
 
-    private ProjectileType selectedProjectileType;
+    public GameObject selectedProjectileType;
 
     private void Start()
     {
@@ -48,36 +48,22 @@ public class EnemyShooting : MonoBehaviour
 
         if (randomValue < projectileProbabilities.standardProbability)
         {
-            selectedProjectileType = ProjectileType.Standard;
+            selectedProjectileType = standardProjectilePrefab;
         }
         else if (randomValue < projectileProbabilities.standardProbability + projectileProbabilities.shotgunProbability)
         {
-            selectedProjectileType = ProjectileType.Shotgun;
+            selectedProjectileType = shotgunProjectilePrefab;
         }
         else
         {
-            selectedProjectileType = ProjectileType.Ricochet;
+            selectedProjectileType = ricochetProjectilePrefab;
         }
     }
 
     private void Shoot()
     {
-        GameObject projectilePrefab;
 
-        switch (selectedProjectileType)
-        {
-            case ProjectileType.Shotgun:
-                projectilePrefab = shotgunProjectilePrefab;
-                break;
-            case ProjectileType.Ricochet:
-                projectilePrefab = ricochetProjectilePrefab;
-                break;
-            default:
-                projectilePrefab = standardProjectilePrefab;
-                break;
-        }
-
-        GameObject newProjectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        GameObject newProjectile = Instantiate(selectedProjectileType, shootPoint.position, shootPoint.rotation);
 
         // Set the projectile's speed and damage (adjust these values as needed)
         Projectile projectileComponent = newProjectile.GetComponent<Projectile>();

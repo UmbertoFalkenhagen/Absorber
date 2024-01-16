@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerShooting : MonoBehaviour
 {
     public Transform firePoint; // Assign a point from where projectiles are spawned (tip of the gun/muzzle).
-    public List<GameObject> projectilePrefabs; // List of different projectile prefabs.
-    private int currentProjectileIndex = 0;
+
+    public GameObject currentProjectileType = null;
+    public int ammo = 0;
+    public AmmoBar ammoBar;
 
 
     private void Update()
@@ -16,21 +18,22 @@ public class PlayerShooting : MonoBehaviour
             Shoot();
         }
 
-        // For testing, use number keys to switch projectiles
-        for (int i = 0; i < projectilePrefabs.Count; i++)
+        if (ammo > 0)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                currentProjectileIndex = i;
-            }
+            ammoBar.gameObject.SetActive(true);
+        } else
+        {
+            ammoBar.gameObject.SetActive(false);
         }
+        
+        
     }
 
     void Shoot()
     {
-        if (firePoint && projectilePrefabs.Count > 0)
+        if (firePoint && currentProjectileType != null)
         {
-            GameObject newProjectile = Instantiate(projectilePrefabs[currentProjectileIndex], firePoint.position, firePoint.rotation);
+            GameObject newProjectile = Instantiate(currentProjectileType, firePoint.position, firePoint.rotation);
 
             // Set the projectile's speed and damage (adjust these values as needed)
             Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
@@ -42,6 +45,14 @@ public class PlayerShooting : MonoBehaviour
             }
 
             SoundManager.Instance.PlaySoundOnce("Shoot");
+            ammo -= 1;
+            if (ammo <= 0)
+            {
+                currentProjectileType = null;
+            }
+        } else
+        {
+            SoundManager.Instance.PlaySoundOnce("EmptyGun");
         }
     }
 }

@@ -19,9 +19,11 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private bool hasDashedRecently = false;
     private Collider playerCollider;
+    private PlayerShooting playerShooting;
 
     private void Start()
     {
+        playerShooting = GetComponent<PlayerShooting>();
         slashCooldown.SetMaxHealth(dashCooldown);
         slashCooldown.SetHealth(dashCooldown);
         rb = GetComponent<Rigidbody>();
@@ -146,7 +148,34 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        
+        EnemyHealth enemyObject = hit.gameObject.GetComponent<EnemyHealth>();
+        if (hasDashedRecently && enemyObject != null)
+        {
+            enemyObject.TakeDamage(5);
+            if (enemyObject.currenthp <= 0)
+            {
+                playerShooting.currentProjectileType = enemyObject.gameObject.GetComponent<EnemyShooting>().selectedProjectileType;
+                int randomValue;
+                if (playerShooting.currentProjectileType.GetComponent<ShotgunProjectile>() != null)
+                {
+                    randomValue = Random.Range(6, 12);
+                    playerShooting.ammoBar.projectileIcon = AmmoBar.ProjectileType.Shotgun;
+                } else if (playerShooting.currentProjectileType.GetComponent<RicochetProjectile>() != null)
+                {
+                    randomValue = Random.Range(8, 14);
+                    playerShooting.ammoBar.projectileIcon = AmmoBar.ProjectileType.Ricochet;
+                } else
+                {
+                    randomValue = Random.Range(12, 18);
+                    playerShooting.ammoBar.projectileIcon = AmmoBar.ProjectileType.Standard;
+                }
+
+                playerShooting.ammo = randomValue;
+                playerShooting.ammoBar.SetMaxAmmo(randomValue);
+            }
+            hasDashedRecently = false;
+            return;
+        }
 
     }
 
