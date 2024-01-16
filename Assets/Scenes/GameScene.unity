@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -142,6 +142,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthbar: {fileID: 1011486578}
   maxHealth: 10
+--- !u!143 &189306913
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189306904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 4.011631
+  m_Radius: 2.8342505
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &295556771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1536,6 +1554,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2474190623194300643, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2474190623194300643, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2474190623194300644, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
       propertyPath: dashSpeed
       value: 20
@@ -1604,7 +1630,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2474190623194300643, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 54a15f8e5f6b4ac42acd58960f9a5753, type: 3}
 --- !u!137 &2736201581571512646
 SkinnedMeshRenderer:
