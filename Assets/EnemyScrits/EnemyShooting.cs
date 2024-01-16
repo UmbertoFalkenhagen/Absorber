@@ -2,42 +2,81 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-    public GameObject projectilePrefab;
+    public enum ProjectileType { Standard, Shotgun, Ricochet }
+
+    [System.Serializable]
+    public struct ProjectileProbability
+    {
+        public float standardProbability;
+        public float shotgunProbability;
+        public float ricochetProbability;
+    }
+
+    public GameObject standardProjectilePrefab;
+    public GameObject shotgunProjectilePrefab;
+    public GameObject ricochetProjectilePrefab;
     public Transform shootPoint;
     public float shootCooldown = 2f; // Time between shots
     private float nextShootTime;
 
+    public ProjectileProbability projectileProbabilities;
+
+    private ProjectileType selectedProjectileType;
+
     private void Start()
     {
-        // Initialize nextShootTime to start shooting immediately
         nextShootTime = Time.time;
+        SelectRandomProjectileType();
     }
 
     private void Update()
     {
-        // Check if it's time to shoot
         if (Time.time >= nextShootTime)
         {
-            // Shoot projectile
             Shoot();
-
-            // Update next shoot time
             nextShootTime = Time.time + shootCooldown;
+        }
+    }
+
+    private void SelectRandomProjectileType()
+    {
+        float totalProbability = projectileProbabilities.standardProbability +
+                                 projectileProbabilities.shotgunProbability +
+                                 projectileProbabilities.ricochetProbability;
+
+        float randomValue = Random.Range(0, totalProbability);
+
+        if (randomValue < projectileProbabilities.standardProbability)
+        {
+            selectedProjectileType = ProjectileType.Standard;
+        }
+        else if (randomValue < projectileProbabilities.standardProbability + projectileProbabilities.shotgunProbability)
+        {
+            selectedProjectileType = ProjectileType.Shotgun;
+        }
+        else
+        {
+            selectedProjectileType = ProjectileType.Ricochet;
         }
     }
 
     private void Shoot()
     {
-        // Instantiate a new projectile at the shoot point
-        GameObject newProjectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        GameObject projectilePrefab;
 
-        // Set the projectile's speed and damage (adjust these values as needed)
-        Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
-        if (projectileComponent != null)
+        switch (selectedProjectileType)
         {
-            projectileComponent.parent = 1;
-            projectileComponent.speed = 10.0f; // Example speed
-            projectileComponent.damage = 1;   // Example damage
+            case ProjectileType.Shotgun:
+                projectilePrefab = shotgunProjectilePrefab;
+                break;
+            case ProjectileType.Ricochet:
+                projectilePrefab = ricochetProjectilePrefab;
+                break;
+            default:
+                projectilePrefab = standardProjectilePrefab;
+                break;
         }
+
+        Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
     }
 }

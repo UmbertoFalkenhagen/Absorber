@@ -178,9 +178,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae8ceaa5368d3ed40b62ba95f4f14f5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 859186254913477860, guid: 111348931c7993742ba23cc7959d5124, type: 3}
+  standardProjectilePrefab: {fileID: 859186254913477860, guid: 111348931c7993742ba23cc7959d5124, type: 3}
+  shotgunProjectilePrefab: {fileID: 859186254913477860, guid: 04fbbdc03b84d054daecca654b495471, type: 3}
+  ricochetProjectilePrefab: {fileID: 859186254913477860, guid: 8425188e6fdb1a54fa725cdb9c2e3949, type: 3}
   shootPoint: {fileID: 2965344735976129187}
   shootCooldown: 2
+  projectileProbabilities:
+    standardProbability: 0
+    shotgunProbability: 0
+    ricochetProbability: 1
 --- !u!114 &8220982467732663881
 MonoBehaviour:
   m_ObjectHideFlags: 0

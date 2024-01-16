@@ -8,6 +8,7 @@ public class RoomManager : MonoBehaviour
     public string layerName; // The layer name we are interested in
     public int layer;
     public List<GameObject> objectsInLayer;
+    public List<GameObject> enemiesInRoom; // List to store enemies
 
     private Collider roomCollider;
 
@@ -16,6 +17,7 @@ public class RoomManager : MonoBehaviour
         // Initialize hasInteractableObjects based on the presence of interactable objects in this room
         roomCollider = GetComponent<Collider>();
         layer = LayerMask.NameToLayer(layerName);
+        InitializeEnemiesInRoom();
     }
 
     private void Update()
@@ -31,12 +33,57 @@ public class RoomManager : MonoBehaviour
         {
             // If no interactable objects left, update the game state to MoveFree
             GameManager.Instance.ChangeState(GameManager.GameState.MoveFree);
+            DeactivateEnemies(); // Deactivate enemies
         }
         else if (CheckPlayerPosition() && CheckForInteractableObjects())
         {
 
             // If the player is in the room and there are interactable objects, update to Fighting state
             GameManager.Instance.ChangeState(GameManager.GameState.Fighting);
+            ActivateEnemies(); // Activate enemies
+        }
+    }
+    
+    private void InitializeEnemiesInRoom()
+    {
+        enemiesInRoom = new List<GameObject>();
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("Enemy")) // Assuming enemies have the tag "Enemy"
+            {
+                enemiesInRoom.Add(child.gameObject);
+                child.gameObject.SetActive(false); // Initially deactivate enemies
+            }
+        }
+    }
+
+    private void ActivateEnemies()
+    {
+        for (int i = enemiesInRoom.Count - 1; i >= 0; i--)
+        {
+            if (enemiesInRoom[i] != null)
+            {
+                enemiesInRoom[i].SetActive(true);
+            }
+            else
+            {
+                enemiesInRoom.RemoveAt(i); // Remove null entries
+            }
+        }
+    }
+
+    private void DeactivateEnemies()
+    {
+        for (int i = enemiesInRoom.Count - 1; i >= 0; i--)
+        {
+            if (enemiesInRoom[i] != null)
+            {
+                enemiesInRoom[i].SetActive(false);
+            }
+            else
+            {
+                enemiesInRoom.RemoveAt(i); // Remove null entries
+            }
         }
     }
 
