@@ -27,8 +27,9 @@ public class InteractiveObject : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        
         currenthp -= damage;
-
+        Debug.Log("Taking damage, new hp is " + currenthp);
         // Trigger shake effect
         if (!isShaking)
             StartCoroutine(Shake());

@@ -1014,7 +1014,7 @@ MonoBehaviour:
   obstaclePrefab: {fileID: 8265460976455744381, guid: 34cef3b0209d279408a658a786c9cda6, type: 3}
   enemyPrefab: {fileID: 2965344736253624232, guid: 0ed4ddf66200e31458bec0ae4867a42d, type: 3}
   maxObstacles: 2
-  maxEnemies: 5
+  maxEnemies: 0
   minDistanceBetweenObstacles: 2
   minDistanceBetweenEnemies: 3
 --- !u!65 &6435351758570601180
@@ -1046,6 +1046,7 @@ MonoBehaviour:
   layerName: Obstacle
   layer: 0
   objectsInLayer: []
+  enemiesInRoom: []
 --- !u!1 &8883964610004430972
 GameObject:
   m_ObjectHideFlags: 0

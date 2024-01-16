@@ -9,12 +9,15 @@ public class PlayerMovement : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 5.0f;
 
-    public CooldownBar slashCooldown; 
-    
+    public CooldownBar slashCooldown;
+
+    private CharacterController characterController;
+
 
     private Rigidbody rb;
     private bool canDash = true;
     private bool isDashing = false;
+    private bool hasDashedRecently = false;
     private Collider playerCollider;
 
     private void Start()
@@ -23,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
         slashCooldown.SetHealth(dashCooldown);
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<Collider>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -49,8 +53,18 @@ public class PlayerMovement : MonoBehaviour
         if (!isDashing)
         {
             Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            Vector3 moveVelocity = moveInput.normalized * moveSpeed;
-            rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+            //Vector3 move = transform.TransformDirection(moveInput) * moveSpeed;
+            characterController.Move(moveInput * moveSpeed * Time.deltaTime);
+            //Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //transform.position += moveInput * moveSpeed * Time.deltaTime;
+            //Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //Vector3 moveVelocity = moveInput.normalized * moveSpeed;
+            //rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+        }
+
+        if (transform.position.y != 1.32f)
+        {
+            transform.position = new Vector3(transform.position.x, 1.32f, transform.position.z);
         }
     }
 
@@ -71,27 +85,39 @@ public class PlayerMovement : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
+        hasDashedRecently = true;
 
-        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        float rayLength;
-        if (groundPlane.Raycast(cameraRay, out rayLength))
+        //Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        //float rayLength;
+        //if (groundPlane.Raycast(cameraRay, out rayLength))
+        //{
+        //    Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+        //    Vector3 dashDirection = (pointToLook - transform.position).normalized;
+
+        //    rb.AddForce(dashDirection * dashSpeed, ForceMode.VelocityChange);
+        //}
+
+        float startTime = Time.time;
+
+        while (Time.time < startTime + dashDuration)
         {
-            Vector3 pointToLook = cameraRay.GetPoint(rayLength);
-            Vector3 dashDirection = (pointToLook - transform.position).normalized;
-
-            rb.AddForce(dashDirection * dashSpeed, ForceMode.VelocityChange);
+            transform.position += transform.forward * dashSpeed * Time.deltaTime;
+            yield return null;
         }
 
         SoundManager.Instance.PlaySoundOnce("Slash");
 
-        yield return new WaitForSeconds(dashDuration);
+        //yield return new WaitForSeconds(dashDuration);
 
-        rb.velocity = Vector3.zero;
+        //rb.velocity = Vector3.zero;
 
         isDashing = false;
 
         StartCoroutine(DashCooldown());
+
+        yield return new WaitForSeconds(0.2f);
+        hasDashedRecently = false;
     }
 
 
@@ -109,13 +135,19 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
-    void OnTriggerEnter(Collider collider)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        InteractiveObject interactiveObject = collider.gameObject.GetComponent<InteractiveObject>();
-        if (isDashing && interactiveObject != null)
+        Debug.Log("Hit " + hit.gameObject.name);
+        InteractiveObject interactiveObject = hit.gameObject.GetComponent<InteractiveObject>();
+        if (hasDashedRecently && interactiveObject != null)
         {
             interactiveObject.TakeDamage(5);
+            hasDashedRecently = false;
+            return;
         }
+
+        
+
     }
 
 }
