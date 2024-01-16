@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
 {
-    public int hp = 10;
+    public int maxhp = 10;
+    public int currenthp;
     public GameObject destructionEffectPrefab;
     public GameObject healthEffectsPrefab;
     public GameObject healthItemPrefab;
@@ -19,29 +20,30 @@ public class InteractiveObject : MonoBehaviour
 
     void Start()
     {
+        currenthp = maxhp;
         objectRenderer = GetComponent<Renderer>();
         originalPosition = transform.position;
     }
 
     public void TakeDamage(int damage)
     {
-        hp -= damage;
+        currenthp -= damage;
 
         // Trigger shake effect
         if (!isShaking)
             StartCoroutine(Shake());
 
         // Check for material change conditions
-        if (hp <= 2)
+        if (currenthp <= maxhp/4)
         {
             objectRenderer.material = criticalHPMaterial;
         }
-        else if (hp <= 5)
+        else if (currenthp <= maxhp/2)
         {
             objectRenderer.material = lowHPMaterial;
         }
 
-        if (hp <= 0)
+        if (currenthp <= 0)
         {
             // 10% chance to spawn a health item
             if (Random.Range(1, 11) <= 2) // Generates a number between 1 and 10

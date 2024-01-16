@@ -84,7 +84,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!23 &2965344736253624214
 MeshRenderer:
@@ -199,6 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21bcfaad8408e14d9cba4d6b0778a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxhp: 5
   shakeDuration: 0.1
   shakeMagnitude: 0.05
+  defaultMaterial: {fileID: 2100000, guid: 765deaeb5659cb244aa64461d76b4f38, type: 2}
+  lowHPMaterial: {fileID: 2100000, guid: 265d67326f540234fad36ddd8731205a, type: 2}
+  criticalHPMaterial: {fileID: 2100000, guid: 1c091c463ab90214397670cb2c0707e8, type: 2}

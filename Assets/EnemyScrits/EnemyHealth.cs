@@ -3,25 +3,43 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int maxHealth = 5;
-    private int currentHealth;
+    public int maxhp = 5;
+    private int currenthp;
 
     public float shakeDuration = 0.1f;
     public float shakeMagnitude = 0.05f;
 
+    public Material defaultMaterial;
+    public Material lowHPMaterial; // Set this in the Inspector to the material for HP <= 5
+    public Material criticalHPMaterial; // Set this in the Inspector to the material for HP <= 2
+
+    private Renderer objectRenderer;
+
     private void Start()
     {
-        currentHealth = maxHealth;
+        currenthp = maxhp;
+        objectRenderer = GetComponent<Renderer>();
+        objectRenderer.material = defaultMaterial;
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        currenthp -= damage;
+
+        // Check for material change conditions
+        if (currenthp <= maxhp / 4)
+        {
+            objectRenderer.material = criticalHPMaterial;
+        }
+        else if (currenthp <= maxhp / 2)
+        {
+            objectRenderer.material = lowHPMaterial;
+        }
 
         // Trigger shake effect
         Shake();
 
-        if (currentHealth <= 0)
+        if (currenthp <= 0)
         {
             DestroyEnemy();
         }
