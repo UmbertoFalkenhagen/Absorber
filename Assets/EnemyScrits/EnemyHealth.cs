@@ -13,12 +13,11 @@ public class EnemyHealth : MonoBehaviour
     public Material lowHPMaterial; // Set this in the Inspector to the material for HP <= 5
     public Material criticalHPMaterial; // Set this in the Inspector to the material for HP <= 2
 
-    private Renderer objectRenderer;
+    public Renderer objectRenderer;
 
     private void Start()
     {
         currenthp = maxhp;
-        objectRenderer = GetComponent<Renderer>();
         objectRenderer.material = defaultMaterial;
     }
 

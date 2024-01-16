@@ -210,6 +210,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: 765deaeb5659cb244aa64461d76b4f38, type: 2}
   lowHPMaterial: {fileID: 2100000, guid: 265d67326f540234fad36ddd8731205a, type: 2}
   criticalHPMaterial: {fileID: 2100000, guid: 1c091c463ab90214397670cb2c0707e8, type: 2}
+  objectRenderer: {fileID: 2606724436734134246}
 --- !u!95 &4154585804102616581
 Animator:
   serializedVersion: 5
@@ -315,6 +316,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afe118382a079f74d9568a2edb60da13, type: 3}
+--- !u!23 &2606724436734134246 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: afe118382a079f74d9568a2edb60da13, type: 3}
+  m_PrefabInstance: {fileID: 3741760878483921762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3776231783595621513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: afe118382a079f74d9568a2edb60da13, type: 3}
