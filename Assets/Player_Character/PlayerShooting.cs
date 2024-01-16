@@ -38,7 +38,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 projectileComponent.parent = 0;
                 projectileComponent.speed = 10.0f; // Example speed
-                projectileComponent.damage = 10;   // Example damage
+                projectileComponent.damage = 1;   // Example damage
             }
 
             SoundManager.Instance.PlaySoundOnce("Shoot");

@@ -34,7 +34,7 @@ public class StandardProjectile : Projectile
             {
                 playerHealth.TakeDamage(damage);
                 Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
-                
+                Debug.Log("Player collision");
                 return; // Exit the method to avoid further checks.
             }
         } 

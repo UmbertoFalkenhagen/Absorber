@@ -184,9 +184,9 @@ MonoBehaviour:
   shootPoint: {fileID: 2965344735976129187}
   shootCooldown: 2
   projectileProbabilities:
-    standardProbability: 0
-    shotgunProbability: 0
-    ricochetProbability: 1
+    standardProbability: 0.5
+    shotgunProbability: 0.3
+    ricochetProbability: 0.2
 --- !u!114 &8220982467732663881
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -77,6 +77,15 @@ public class EnemyShooting : MonoBehaviour
                 break;
         }
 
-        Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        GameObject newProjectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+
+        // Set the projectile's speed and damage (adjust these values as needed)
+        Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+        if (projectileComponent != null)
+        {
+            projectileComponent.parent = 1;
+            projectileComponent.speed = 10.0f; // Example speed
+            projectileComponent.damage = 1;   // Example damage
+        }
     }
 }

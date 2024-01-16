@@ -32,8 +32,9 @@ public class RicochetProjectile : Projectile
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
+                playerHealth.TakeDamage(damage);
                 Destroy(gameObject);  // Optionally, destroy the bullet after hitting.
-
+                Debug.Log("Player collision");
                 return; // Exit the method to avoid further checks.
             }
         }
