@@ -49,6 +49,7 @@ public class GameOverScreenHandler : MonoBehaviour
 
         fadePanel.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1);
         SoundManager.Instance.StopAllSounds();
+        HighscoreManager.Instance.highScore = 0;
         SceneManager.LoadScene(gameSceneName);
     }
 

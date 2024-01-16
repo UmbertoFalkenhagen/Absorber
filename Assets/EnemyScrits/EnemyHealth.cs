@@ -35,6 +35,7 @@ public class EnemyHealth : MonoBehaviour
         
         if (currenthp <= 0)
         {
+            HighscoreManager.Instance.SetHighScore(maxhp);
             DestroyEnemy();
         }
     }

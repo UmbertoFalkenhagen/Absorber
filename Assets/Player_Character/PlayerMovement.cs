@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
         StartCoroutine(DashCooldown());
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         hasDashedRecently = false;
     }
 
